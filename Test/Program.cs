@@ -32,8 +32,7 @@ namespace Test
         [SqlProperty(ColumnName = "Col_B")]
         public int B { get; set; }
 
-        [SqlProperty(2, ColumnName = "Col_SubModel 2")]
-        [SqlProperty(ColumnName = "Col_SubModel")]
+        [SqlProperty()]
         public SubModel SubModel { get; set; }
     }
 

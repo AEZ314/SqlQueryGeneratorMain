@@ -31,6 +31,7 @@ namespace SqlQueryGenerator
         }
 
 
+
         private static string GenerateParenthStr<T>(IEnumerable<T> elements, Func<T, string> elementToStr = null, char seperator = ',')
         {
             elementToStr = elementToStr ?? ((x) => x.ToString());

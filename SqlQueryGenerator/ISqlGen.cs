@@ -12,6 +12,7 @@ namespace SqlQueryGenerator
         /// </summary>
         object QueryObject { get; set; }
 
+
         /// <summary>
         /// Manually generates an <see cref="SqlParameter"/> with query string for row insertion using an object's properties.
         /// </summary>
@@ -28,6 +29,8 @@ namespace SqlQueryGenerator
         /// <param name="optionSet">Used for choosing out of multiple <see cref="SqlPropertyAttribute"/> by <see cref="SqlPropertyAttribute.OptionSet"/>.</param>
         /// <param name="useNestedObjects">If true, the returned <see cref="SqlParameter"/> will also account for the sub-objects of <see cref="QueryObject"/> as well as it's own properties.</param>
         /// <returns>An <see cref="SqlParameter"/> for querying a DB. Be aware that the returned <see cref="SqlParameter.QueryObject"/> might differ from <see cref="QueryObject"/>.</returns>
-        SqlParameter AutoInsert(string tableName, byte optionSet = 0, bool useNestedObjects = true);
+        SqlParameter AutoInsert(string tableName, byte optionSet, bool useNestedObjects);
+    
+        // Add more functionality!
     }
 }
