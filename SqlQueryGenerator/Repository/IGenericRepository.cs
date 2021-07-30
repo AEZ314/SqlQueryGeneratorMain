@@ -6,9 +6,12 @@ namespace SqlQueryGenerator.Repository
 {
     public interface IGenericRepository
     {
-        void ManualInsert<T>(string tableName, object source, params T[] sqlProperties) where T : ISqlProperty;
-        void AutoInsert(string tableName, object source, byte optionSet, bool useNestedObjects);
+        List<J> Query<T, J>(string sqlStr, params T[] sqlProperties) where T : ISqlProperty;
+        List<J> Query<J>(string sqlStr, object source, bool findNestedObjects);
+        int Execute<T, J>(string sqlStr, params T[] sqlProperties) where T : ISqlProperty;
+        int Execute<J>(string sqlStr, object source, bool findNestedObjects);
 
-
+        void ManualInsert<T>(string tableName, params T[] sqlProperties) where T : ISqlProperty;
+        void AutoInsert(object source, byte optionSet, bool findNestedObjects);
     }
 }

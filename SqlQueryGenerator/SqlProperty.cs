@@ -10,8 +10,9 @@ namespace SqlQueryGenerator
     public class SqlProperty : ISqlProperty
     {
         public string Column { get; set; }
-        public string Property{ get; set; }
+        public string Property { get; set; }
         public object Value { get; set; }
+
 
         /// <summary>
         /// Use this when you already have a query object and don't need a generated query object such as <see cref="SqlParameter.QueryObject"/>. 

@@ -7,9 +7,11 @@ namespace SqlQueryGenerator.Attributes
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class SqlPropertyAttribute : Attribute, IOptionAttribute
     {
-        public string ColumnName { get; set; }
-
         public byte OptionSet { get; private set; }
+
+        public string ColumnName { get; set; }
+        public string Alias { get; set; }
+
 
         public SqlPropertyAttribute(byte optionSet = 0)
         {

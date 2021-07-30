@@ -11,11 +11,11 @@ namespace SqlQueryGenerator
         /// </summary>
         string Column { get; set; }
         /// <summary>
-        /// Name of the associated property.
+        /// Name of the property.
         /// </summary>
         string Property { get; set; }
         /// <summary>
-        /// Value of the associated property.
+        /// Value of the property.
         /// </summary>
         object Value { get; set; }
     }

@@ -22,6 +22,7 @@ namespace Test
         }
     }
 
+    [SqlTableName(2, TableName = "Users")]
     class Model
     {
         [SqlProperty(2, ColumnName = "Col_A 2")]
@@ -83,7 +84,7 @@ namespace Test
         [Benchmark]
         public SqlParameter Automatic()
         {
-            var result = gen.AutoInsert("sample_table", 2);
+            var result = gen.AutoInsert(2);
             return result;
         }
     }

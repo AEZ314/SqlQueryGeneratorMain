@@ -21,7 +21,6 @@ namespace SqlQueryGenerator
         /// or alternatively (Column Name, Property Name) where the value is assumed to be null. Go with the latter if you don't want to use the returned <see cref="SqlParameter.QueryObject"/>.</param>
         /// <returns>An <see cref="SqlParameter"/> to be used for querying.</returns>
         SqlParameter ManualInsert<T>(string tableName, params T[] sqlProperties) where T : ISqlProperty;
-
         /// <summary>
         /// Generates an <see cref="SqlParameter"/> using the properties of <see cref="QueryObject"/> which are tagged with <see cref="SqlPropertyAttribute"/>.
         /// </summary>
@@ -29,8 +28,23 @@ namespace SqlQueryGenerator
         /// <param name="optionSet">Used for choosing out of multiple <see cref="SqlPropertyAttribute"/> by <see cref="SqlPropertyAttribute.OptionSet"/>.</param>
         /// <param name="useNestedObjects">If true, the returned <see cref="SqlParameter"/> will also account for the sub-objects of <see cref="QueryObject"/> as well as it's own properties.</param>
         /// <returns>An <see cref="SqlParameter"/> for querying a DB. Be aware that the returned <see cref="SqlParameter.QueryObject"/> might differ from <see cref="QueryObject"/>.</returns>
-        SqlParameter AutoInsert(string tableName, byte optionSet, bool useNestedObjects);
-    
-        // Add more functionality!
+        SqlParameter AutoInsert(byte optionSet, bool useNestedObjects);
+        
+        /// <summary>
+        /// Manually choose the properties of the query object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sqlStr"></param>
+        /// <param name="sqlProperties"></param>
+        /// <returns></returns>
+        SqlParameter GenerateSqlParameter<T>(string sqlStr, params T[] sqlProperties) where T : ISqlProperty;
+        /// <summary>
+        /// Let the library choose properties of the query object. This method doesn't leverage metadata passed by attributes, unless used for enabling nested object usage this method basically wraps the SqlParameter Constructor (so it basically adds nothing, but event then I encourage the usage of this method for consistency).
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sqlStr"></param>
+        /// <param name="sqlProperties"></param>
+        /// <returns></returns>
+        SqlParameter GenerateSqlParameter(string sqlStr, bool findNestedObjects = true);
     }
 }

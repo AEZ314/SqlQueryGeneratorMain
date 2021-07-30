@@ -6,7 +6,7 @@ namespace SqlQueryGenerator
 {
     public interface ISqlAccessProvider
     {
-        List<T> Query<T>(string sql, object parameter);
-        int Execute(string sql, object parameter);
+        List<J> Query<T, J>(T sqlParameter) where T : ISqlParameter;
+        int Execute<T>(T sqlParameter) where T : ISqlParameter;
     }
 }
