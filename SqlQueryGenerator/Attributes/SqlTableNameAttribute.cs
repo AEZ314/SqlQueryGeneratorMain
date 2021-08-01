@@ -7,12 +7,13 @@ namespace SqlQueryGenerator.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = true)]
     public class SqlTableNameAttribute : Attribute, IOptionAttribute
     {
-        public string TableName { get; set; }
+        public string Table { get; set; }
 
         public byte OptionSet { get; private set; }
 
-        public SqlTableNameAttribute(byte optionSet = 0)
+        public SqlTableNameAttribute(string table, byte optionSet = 0)
         {
+            Table = table;
             OptionSet = optionSet;
         }
     }

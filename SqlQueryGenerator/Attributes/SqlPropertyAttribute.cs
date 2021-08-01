@@ -8,13 +8,11 @@ namespace SqlQueryGenerator.Attributes
     public class SqlPropertyAttribute : Attribute, IOptionAttribute
     {
         public byte OptionSet { get; private set; }
+        public string Column { get; set; }
 
-        public string ColumnName { get; set; }
-        public string Alias { get; set; }
-
-
-        public SqlPropertyAttribute(byte optionSet = 0)
+        public SqlPropertyAttribute(string column, byte optionSet = 0)
         {
+            Column = column;
             OptionSet = optionSet;
         }
     }

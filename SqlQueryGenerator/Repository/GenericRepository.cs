@@ -15,17 +15,32 @@ namespace SqlQueryGenerator.Repository
         {
             SqlAccessProvider = sqlAccessProvider;
         }
-        
-        // These methods are to be used when the other methods aren't enough. *You can leverage nested objects by using these methods.
-        public List<J> Query<T, J>(string sqlStr, params T[] sqlProperties) where T : ISqlProperty
-        {
-            var sqlParameter = SqlGen.GenerateSqlParameter(sqlStr, sqlProperties);
-            return SqlAccessProvider.Query<SqlParameter, J>(sqlParameter);
-        }
-        public List<J> Query<J>(string sqlStr, object source, bool findNestedObjects = true)
+
+
+        public void AutoInsert(object source, byte optionSet = 0, bool findNestedObjects = true)
         {
             SqlGen.QueryObject = source;
-            var sqlParameter = SqlGen.GenerateSqlParameter(sqlStr, findNestedObjects);
+            var sqlParameter = SqlGen.AutoInsert(optionSet, findNestedObjects);
+            SqlAccessProvider.Execute(sqlParameter);
+            SqlGen.QueryObject = null;
+        }
+        public void ManualInsert<T>(string tableName, params T[] sqlProperties) where T : ISqlProperty
+        {
+            var sqlParameter = SqlGen.ManualInsert(tableName, sqlProperties);
+            SqlAccessProvider.Execute(sqlParameter);
+            SqlGen.QueryObject = null;
+        }
+
+        // You can leverage nested objects by using these methods.
+        public List<J> Query<T, J>(string sqlStr, int limit = -1, int offset = -1, params T[] sqlProperties) where T : ISqlProperty
+        {
+            var sqlParameter = SqlGen.BuildQuery(sqlStr, limit, offset, sqlProperties);
+            return SqlAccessProvider.Query<SqlParameter, J>(sqlParameter);
+        }
+        public List<J> Query<J>(string sqlStr, object source, int limit = -1, int offset = -1, bool findNestedObjects = true)
+        {
+            SqlGen.QueryObject = source;
+            var sqlParameter = SqlGen.BuildQuery(sqlStr, limit, offset, findNestedObjects);
             var result = SqlAccessProvider.Query<SqlParameter, J>(sqlParameter);
             SqlGen.QueryObject = null;
             return result;
@@ -43,22 +58,5 @@ namespace SqlQueryGenerator.Repository
             SqlGen.QueryObject = null;
             return result;
         }
-
-        public void ManualInsert<T>(string tableName, params T[] sqlProperties) where T : ISqlProperty
-        {
-            var sqlParameter = SqlGen.ManualInsert(tableName, sqlProperties);
-            SqlAccessProvider.Execute(sqlParameter);
-            SqlGen.QueryObject = null;
-        }
-        public void AutoInsert(object source, byte optionSet = 0, bool findNestedObjects = true)
-        {
-            SqlGen.QueryObject = source;
-            var sqlParameter = SqlGen.AutoInsert(optionSet, findNestedObjects);
-            SqlAccessProvider.Execute(sqlParameter);
-            SqlGen.QueryObject = null;
-        }
-
-
-
     }
 }

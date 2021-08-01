@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using SqlQueryGenerator;
+using SqlQueryGenerator.Helpers;
 using SqlQueryGenerator.Attributes;
 using System;
 
@@ -13,38 +14,49 @@ namespace Test
             //BenchmarkRunner.Run<BenchmarkWrapper>();
             //return;
 
-            var wrapper = new BenchmarkWrapper();
-            wrapper.Setup();
+            //var wrapper = new BenchmarkWrapper();
+            //wrapper.Setup();
 
-            var result = wrapper.Automatic();
+            //var result = wrapper.Automatic();
 
-            Console.WriteLine(result.QueryString);
+            //Console.WriteLine(result.QueryString);
+
+            var model = new Model()
+            {
+                A = "AVal",
+                B = 1,
+                SubModel = new SubModel()
+                {
+                    a = "a",
+                    b = 2,
+                },
+            };
+
+            string sql = $@"SELECT COUNT(*) FROM {model.TBL(0)} 
+                           WHERE {model.COL("A", 0)} = @Credentials_EmailAddress 
+                           AND   {model.COL("B", 0)} = @Credentials_Password;";
+
         }
     }
 
-    [SqlTableName(2, TableName = "Users")]
+    [SqlTableName("UserTable")]
     class Model
     {
-        [SqlProperty(2, ColumnName = "Col_A 2")]
-        [SqlProperty(ColumnName = "Col_A")]
+        [SqlProperty("ACol")]
         public string A { get; set; }
         
-        [SqlProperty(2, ColumnName = "Col_B 2")]
-        [SqlProperty(ColumnName = "Col_B")]
+        [SqlProperty("BCol")]
         public int B { get; set; }
 
-        [SqlProperty()]
         public SubModel SubModel { get; set; }
     }
 
     class SubModel
     {
-        [SqlProperty(2, ColumnName = "Col_a 2")]
-        [SqlProperty(ColumnName = "Col_a")]
+        [SqlProperty("aCol")]
         public string a { get; set; }
         
-        [SqlProperty(2, ColumnName = "Col_b 2")]
-        [SqlProperty(ColumnName = "Col_b")]
+        [SqlProperty("bCol")]
         public int b { get; set; }
 
     }
