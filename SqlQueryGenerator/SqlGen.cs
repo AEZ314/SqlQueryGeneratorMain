@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SqlQueryGenerator.Helpers;
 
 namespace SqlQueryGenerator
@@ -45,7 +46,14 @@ namespace SqlQueryGenerator
 
             return GenerateSqlParameter(sqlStr, sqlProperties);
         }
-        
+        public SqlParameter ManualUpdate(string tableName, string condition, ISqlProperty[] conditionProperties, params ISqlProperty[] sqlProperties)
+        {
+            string updates = GenerateSeriesStr(sqlProperties, (x) => $"{x.Column} = @{x.Property} \n");
+            string sqlStr = $@"UPDATE {tableName} SET {updates} WHERE {condition};";
+
+           return GenerateSqlParameter(sqlStr, conditionProperties.Concat(sqlProperties).ToArray());
+        }
+
         public SqlParameter GenerateSqlParameter(string sqlStr, params ISqlProperty[] sqlProperties)
         {
             object queryObject = GenerateSqlObject(sqlProperties);
@@ -59,17 +67,23 @@ namespace SqlQueryGenerator
         
         private static string GenerateParenthStr<T>(IEnumerable<T> elements, Func<T, string> elementToStr = null, char seperator = ',')
         {
-            elementToStr = elementToStr ?? ((x) => x.ToString());
-
-            var innerStr = "";
-
-            foreach(var element in elements)
-            {
-                innerStr += $"{elementToStr(element)}{seperator} ";
-            }
-            innerStr = innerStr.Trim(',', ' ');
+            var innerStr = GenerateSeriesStr(elements, elementToStr, seperator);
 
             return $"({innerStr})";
+        }
+        private static string GenerateSeriesStr<T>(IEnumerable<T> elements, Func<T, string> elementToStr = null, char seperator = ',')
+        {
+            elementToStr = elementToStr ?? ((x) => x.ToString());
+
+            var str = "";
+
+            foreach (var element in elements)
+            {
+                str += $"{elementToStr(element)}{seperator} ";
+            }
+            str = str.Trim(seperator, ' ');
+
+            return str;
         }
         private static Dictionary<string, object> GenerateSqlObject(params ISqlProperty[] sqlProperties)
         {

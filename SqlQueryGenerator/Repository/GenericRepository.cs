@@ -30,6 +30,12 @@ namespace SqlQueryGenerator.Repository
             SqlAccessProvider.Execute(sqlParameter);
             SqlGen.QueryObject = null;
         }
+        public void ManualUpdate(string tableName, string condition, ISqlProperty[] conditionProperties, params ISqlProperty[] sqlProperties)
+        {
+            var sqlParameter = SqlGen.ManualUpdate(tableName, condition, conditionProperties, sqlProperties);
+            SqlAccessProvider.Execute(sqlParameter);
+            SqlGen.QueryObject = null;
+        }
 
         // You can leverage nested objects by using these methods.
         public List<T> Query<T>(string sqlStr, int limit = -1, int offset = -1, params ISqlProperty[] sqlProperties)

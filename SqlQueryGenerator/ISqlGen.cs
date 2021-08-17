@@ -39,6 +39,7 @@ namespace SqlQueryGenerator
         /// or alternatively (Column Name, Property Name) where the value is assumed to be null. Go with the latter if you don't want to use the returned <see cref="SqlParameter.QueryObject"/>.</param>
         /// <returns>An <see cref="SqlParameter"/> to be used for querying.</returns>
         SqlParameter ManualInsert(string tableName, params ISqlProperty[] sqlProperties);
+        SqlParameter ManualUpdate(string tableName, string condition, ISqlProperty[] conditionProperties, params ISqlProperty[] sqlProperties);
 
         /// <summary>
         /// Manually choose the properties of the query object.

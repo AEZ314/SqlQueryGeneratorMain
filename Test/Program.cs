@@ -12,10 +12,15 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            var result = new SqlGen().ManualInsert("sample_table",
+            var result = new SqlGen().ManualUpdate("sample_table", "ID = @id",
+                new ISqlProperty[]
+                {
+                    new SqlProperty(null, "ConditionParameter1", "condit 1"),
+                    new SqlProperty(null, "ConditionParameter2", "condit 2"),
+                },
+                new SqlProperty("C_col", "C_prop", "C_val"),
                 new SqlProperty("A_col", "A_prop", "A_val"),
-                new SqlProperty("B_col", "B_prop", "B_val"),
-                new SqlProperty("C_col", "C_prop", "C_val"));
+                new SqlProperty("B_col", "B_prop", "B_val"));
 
             //BenchmarkRunner.Run<BenchmarkWrapper>();
             //return;
@@ -27,24 +32,32 @@ namespace Test
 
             //Console.WriteLine(result.QueryString);
 
-            var model = new Model()
-            {
-                A = "AVal",
-                B = 1,
-                SubModel = new SubModel()
-                {
-                    a = "a",
-                    b = 2,
-                },
+            //var model = new Model()
+            //{
+            //    A = "AVal",
+            //    B = 1,
+            //    SubModel = new SubModel()
+            //    {
+            //        a = "a",
+            //        b = 2,
+            //    },
+            //};
+
+            //string sql = $@"SELECT COUNT(*) FROM {model.TBL()} 
+            //               WHERE {model.COL("A")} = @Credentials_EmailAddress 
+            //               AND   {model.COL("B")} = @Credentials_Password;";
+
+            //Console.WriteLine(sql);
+
+            //new GenericRepository(null).AutoInsert(model);
+
+            var job = new Job()
+            { 
+                Name = "sample name",
+                Description = "sample description",
             };
 
-            string sql = $@"SELECT COUNT(*) FROM {model.TBL()} 
-                           WHERE {model.COL("A")} = @Credentials_EmailAddress 
-                           AND   {model.COL("B")} = @Credentials_Password;";
-
-            Console.WriteLine(sql);
-
-            new GenericRepository(null).AutoInsert(model);
+            new GenericRepository(null).AutoInsert(job);
         }
     }
 
@@ -59,6 +72,7 @@ namespace Test
     }
 
     class SubModel
+
     {
         [SqlProperty("aCol")]
         public string a { get; set; }

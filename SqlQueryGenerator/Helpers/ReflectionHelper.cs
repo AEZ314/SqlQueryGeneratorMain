@@ -27,7 +27,7 @@ namespace SqlQueryGenerator.Helpers
 
             var type = source.GetType();
 
-            var properties = type.GetProperties().Where(x => !x.IsDefined(typeof(SqlPropertyIgnoreAttribute)));
+            var properties = type.GetProperties(BindingFlags.Instance| BindingFlags.Public | BindingFlags.NonPublic).Where(x => !x.IsDefined(typeof(SqlPropertyIgnoreAttribute)));
             foreach (var property in properties)
             {
                 if (IsPrimitive(property.PropertyType))
@@ -51,7 +51,7 @@ namespace SqlQueryGenerator.Helpers
 
             var type = source.GetType();
 
-            var properties = type.GetProperties().Where(x => x.IsDefined(typeof(SqlPropertyAttribute)));
+            var properties = type.GetProperties().Where(x => !x.IsDefined(typeof(SqlPropertyIgnoreAttribute)));
             foreach (var property in properties)
             {
                 if (IsPrimitive(property.PropertyType))
@@ -100,7 +100,7 @@ namespace SqlQueryGenerator.Helpers
 
         public static bool IsPrimitive(Type type)
         {
-            return type.IsPrimitive || type == typeof(string);
+            return type.IsPrimitive || type == typeof(string) || type == typeof(DateTime);
         }
     }
 }
