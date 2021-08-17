@@ -4,6 +4,7 @@ using SqlQueryGenerator;
 using SqlQueryGenerator.Helpers;
 using SqlQueryGenerator.Attributes;
 using System;
+using SqlQueryGenerator.Repository;
 
 namespace Test
 {
@@ -43,11 +44,13 @@ namespace Test
 
             Console.WriteLine(sql);
 
+            new GenericRepository(null).AutoInsert(model);
         }
     }
 
     class Model
     {
+        [SqlPropertyIgnore]
         public string A { get; set; }
         
         public int B { get; set; }

@@ -40,7 +40,7 @@ namespace SqlQueryGenerator
         public SqlParameter ManualInsert(string tableName, params ISqlProperty[] sqlProperties)
         {
             string columns = GenerateParenthStr(sqlProperties, (x) => x.Column);            // Making these three constructions separate may give independence but it comes with a performence cost, maybe change this.
-            string properties = GenerateParenthStr(sqlProperties, (x) => $"@{x.Value}");
+            string properties = GenerateParenthStr(sqlProperties, (x) => $"@{x.Property}");
             string sqlStr = $"INSERT INTO {tableName} {columns} \n values {properties};";
 
             return GenerateSqlParameter(sqlStr, sqlProperties);
