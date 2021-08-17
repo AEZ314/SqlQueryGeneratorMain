@@ -10,7 +10,7 @@ namespace SqlQueryGenerator.Attributes
         public byte OptionSet { get; private set; }
         public string Column { get; set; }
 
-        public SqlPropertyAttribute(string column, byte optionSet = 0)
+        public SqlPropertyAttribute(string column = null, byte optionSet = 0)
         {
             Column = column;
             OptionSet = optionSet;

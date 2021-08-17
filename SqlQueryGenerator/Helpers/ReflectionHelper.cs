@@ -33,7 +33,7 @@ namespace SqlQueryGenerator.Helpers
                 if (IsPrimitive(property.PropertyType))
                 {
                     var attribute = GetOptionAttributeFromProperty<SqlPropertyAttribute>(property, optionSet);
-                    sqlProperties.Add((attribute.Column, $"{propertyNamePrefix}{property.Name}", property.GetValue(source)));
+                    sqlProperties.Add(new SqlProperty(attribute.Column, $"{propertyNamePrefix}{property.Name}", property.GetValue(source)));
                 }
                 else if (findNestedObjects)
                 {
@@ -57,7 +57,7 @@ namespace SqlQueryGenerator.Helpers
             {
                 if (IsPrimitive(property.PropertyType))
                 {
-                    sqlProperties.Add((null, $"{propertyNamePrefix}{property.Name}", property.GetValue(source)));
+                    sqlProperties.Add(new SqlProperty(null, $"{propertyNamePrefix}{property.Name}", property.GetValue(source)));
                 }
                 else if (findNestedObjects)
                 {
@@ -70,7 +70,13 @@ namespace SqlQueryGenerator.Helpers
         }
         public static string GetTableName(Type type, byte optionSet)
         {
-            return GetOptionAttributeFromType<SqlTableNameAttribute>(type.GetTypeInfo(), optionSet).Table;
+            var attr = GetOptionAttributeFromType<SqlTableNameAttribute>(type.GetTypeInfo(), optionSet);
+            if (attr != null) 
+            {
+                return attr.Table;
+            }
+
+            return type.Name;
         }
 
         public static T GetOptionAttributeFromProperty<T>(MemberInfo info, byte optionSet) where T : Attribute, IOptionAttribute

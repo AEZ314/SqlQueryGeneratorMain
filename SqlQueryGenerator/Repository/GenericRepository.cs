@@ -24,7 +24,7 @@ namespace SqlQueryGenerator.Repository
             SqlAccessProvider.Execute(sqlParameter);
             SqlGen.QueryObject = null;
         }
-        public void ManualInsert<T>(string tableName, params T[] sqlProperties) where T : ISqlProperty
+        public void ManualInsert(string tableName, params ISqlProperty[] sqlProperties)
         {
             var sqlParameter = SqlGen.ManualInsert(tableName, sqlProperties);
             SqlAccessProvider.Execute(sqlParameter);
@@ -32,25 +32,25 @@ namespace SqlQueryGenerator.Repository
         }
 
         // You can leverage nested objects by using these methods.
-        public List<J> Query<T, J>(string sqlStr, int limit = -1, int offset = -1, params T[] sqlProperties) where T : ISqlProperty
+        public List<T> Query<T>(string sqlStr, int limit = -1, int offset = -1, params ISqlProperty[] sqlProperties)
         {
             var sqlParameter = SqlGen.BuildQuery(sqlStr, limit, offset, sqlProperties);
-            return SqlAccessProvider.Query<SqlParameter, J>(sqlParameter);
+            return SqlAccessProvider.Query<SqlParameter, T>(sqlParameter);
         }
-        public List<J> Query<J>(string sqlStr, object source, int limit = -1, int offset = -1, bool findNestedObjects = true)
+        public List<T> Query<T>(string sqlStr, object source, int limit = -1, int offset = -1, bool findNestedObjects = true)
         {
             SqlGen.QueryObject = source;
             var sqlParameter = SqlGen.BuildQuery(sqlStr, limit, offset, findNestedObjects);
-            var result = SqlAccessProvider.Query<SqlParameter, J>(sqlParameter);
+            var result = SqlAccessProvider.Query<SqlParameter, T>(sqlParameter);
             SqlGen.QueryObject = null;
             return result;
         }
-        public int Execute<T, J>(string sqlStr, params T[] sqlProperties) where T : ISqlProperty
+        public int Execute<T>(string sqlStr, params ISqlProperty[] sqlProperties)
         {
             var sqlParameter = SqlGen.GenerateSqlParameter(sqlStr, sqlProperties);
             return SqlAccessProvider.Execute(sqlParameter);
         }
-        public int Execute<J>(string sqlStr, object source, bool findNestedObjects = true)
+        public int Execute<T>(string sqlStr, object source, bool findNestedObjects = true)
         {
             SqlGen.QueryObject = source;
             var sqlParameter = SqlGen.GenerateSqlParameter(sqlStr, findNestedObjects);

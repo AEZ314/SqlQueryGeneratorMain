@@ -15,7 +15,7 @@ namespace SqlQueryGenerator
         }
 
 
-        public SqlParameter BuildQuery<T>(string sqlStr, int limit = -1, int offset = -1, params T[] sqlProperties) where T : ISqlProperty
+        public SqlParameter BuildQuery(string sqlStr, int limit = -1, int offset = -1, params ISqlProperty[] sqlProperties)
         {
             var limitStr = limit == -1 ? "" : $" LIMIT {limit} ";
             var offsetStr = offset == -1 ? "" : $" OFFSET {offset} ";
@@ -37,16 +37,16 @@ namespace SqlQueryGenerator
             var sqlProperties = ReflectionHelper.GetSqlProperties(QueryObject, optionSet, findNestedObjects);
             return ManualInsert(tableName, sqlProperties.ToArray());
         }
-        public SqlParameter ManualInsert<T>(string tableName, params T[] sqlProperties) where T : ISqlProperty
+        public SqlParameter ManualInsert(string tableName, params ISqlProperty[] sqlProperties)
         {
             string columns = GenerateParenthStr(sqlProperties, (x) => x.Column);            // Making these three constructions separate may give independence but it comes with a performence cost, maybe change this.
-            string properties = GenerateParenthStr(sqlProperties, (x) => $"@{x.Property}");
+            string properties = GenerateParenthStr(sqlProperties, (x) => $"@{x.Value}");
             string sqlStr = $"INSERT INTO {tableName} {columns} \n values {properties};";
 
             return GenerateSqlParameter(sqlStr, sqlProperties);
         }
         
-        public SqlParameter GenerateSqlParameter<T>(string sqlStr, params T[] sqlProperties) where T : ISqlProperty
+        public SqlParameter GenerateSqlParameter(string sqlStr, params ISqlProperty[] sqlProperties)
         {
             object queryObject = GenerateSqlObject(sqlProperties);
             return new SqlParameter(sqlStr, queryObject);
@@ -71,7 +71,7 @@ namespace SqlQueryGenerator
 
             return $"({innerStr})";
         }
-        private static Dictionary<string, object> GenerateSqlObject<T>(params T[] sqlProperties) where T : ISqlProperty
+        private static Dictionary<string, object> GenerateSqlObject(params ISqlProperty[] sqlProperties)
         {
             var dict = new Dictionary<string, object>();
 

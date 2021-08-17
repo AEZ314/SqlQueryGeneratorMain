@@ -38,8 +38,8 @@ namespace SqlQueryGenerator
         /// <param name="sqlProperties">These can be substituted with tuples of three of form (Column Name, Property Name, Property Value) 
         /// or alternatively (Column Name, Property Name) where the value is assumed to be null. Go with the latter if you don't want to use the returned <see cref="SqlParameter.QueryObject"/>.</param>
         /// <returns>An <see cref="SqlParameter"/> to be used for querying.</returns>
-        SqlParameter ManualInsert<T>(string tableName, params T[] sqlProperties) where T : ISqlProperty;
-        
+        SqlParameter ManualInsert(string tableName, params ISqlProperty[] sqlProperties);
+
         /// <summary>
         /// Manually choose the properties of the query object.
         /// </summary>
@@ -47,7 +47,7 @@ namespace SqlQueryGenerator
         /// <param name="sqlStr"></param>
         /// <param name="sqlProperties"></param>
         /// <returns></returns>
-        SqlParameter GenerateSqlParameter<T>(string sqlStr, params T[] sqlProperties) where T : ISqlProperty;
+        SqlParameter GenerateSqlParameter(string sqlStr, params ISqlProperty[] sqlProperties);
         /// <summary>
         /// Let the library choose properties of the query object. This method doesn't leverage metadata passed by attributes, unless used for enabling nested object usage this method basically wraps the SqlParameter Constructor (so it basically adds nothing, but event then I encourage the usage of this method for consistency).
         /// </summary>

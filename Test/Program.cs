@@ -11,6 +11,11 @@ namespace Test
     {
         static void Main(string[] args)
         {
+            var result = new SqlGen().ManualInsert("sample_table",
+                new SqlProperty("A_col", "A_prop", "A_val"),
+                new SqlProperty("B_col", "B_prop", "B_val"),
+                new SqlProperty("C_col", "C_prop", "C_val"));
+
             //BenchmarkRunner.Run<BenchmarkWrapper>();
             //return;
 
@@ -32,20 +37,19 @@ namespace Test
                 },
             };
 
-            string sql = $@"SELECT COUNT(*) FROM {model.TBL(0)} 
-                           WHERE {model.COL("A", 0)} = @Credentials_EmailAddress 
-                           AND   {model.COL("B", 0)} = @Credentials_Password;";
+            string sql = $@"SELECT COUNT(*) FROM {model.TBL()} 
+                           WHERE {model.COL("A")} = @Credentials_EmailAddress 
+                           AND   {model.COL("B")} = @Credentials_Password;";
+
+            Console.WriteLine(sql);
 
         }
     }
 
-    [SqlTableName("UserTable")]
     class Model
     {
-        [SqlProperty("ACol")]
         public string A { get; set; }
         
-        [SqlProperty("BCol")]
         public int B { get; set; }
 
         public SubModel SubModel { get; set; }
@@ -89,7 +93,11 @@ namespace Test
         //[Benchmark]
         public SqlParameter Manual()
         {
-            var result = gen.ManualInsert<SqlProperty>("sample_table", ("A", "a", ""), ("B", "b", ""), ("C", "c", ""));
+            var result = gen.ManualInsert("sample_table",
+                new SqlProperty("A_col", "A_prop", "A_val"),
+                new SqlProperty("B_col", "B_prop", "B_val"),
+                new SqlProperty("C_col", "C_prop", "C_val"));
+
             return result;
         }
 

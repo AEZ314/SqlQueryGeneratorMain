@@ -22,7 +22,13 @@ namespace SqlQueryGenerator.Helpers
         /// <returns>The column name associated with the given property.</returns>
         public static string COL(this object source, string propertyName, byte optionSet = 0)
         {
-            return ReflectionHelper.GetOptionAttributeFromProperty<SqlPropertyAttribute>(source.GetType().GetProperty(propertyName), optionSet).Column;
+            var attr = ReflectionHelper.GetOptionAttributeFromProperty<SqlPropertyAttribute>(source.GetType().GetProperty(propertyName), optionSet);
+            if (attr != null)
+            {
+                return attr.Column;
+            }
+
+            return propertyName;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SqlQueryGenerator.Attributes
 
         public byte OptionSet { get; private set; }
 
-        public SqlTableNameAttribute(string table, byte optionSet = 0)
+        public SqlTableNameAttribute(string table = null, byte optionSet = 0)
         {
             Table = table;
             OptionSet = optionSet;
